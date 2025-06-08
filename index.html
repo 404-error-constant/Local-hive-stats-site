@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Hive Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    ul { list-style-type: none; padding-left: 0; }
+    li { padding: 0.2rem 0; }
+    strong { width: 140px; display: inline-block; }
+  </style>
+</head>
+<body>
+  <h1>Stats for ChessExpert07</h1>
+  <div id="stats">Loading...</div>
+
+  <script>
+    fetch("http://localhost:3000/mydata")
+      .then(res => {
+        if (!res.ok) throw new Error("Network response not ok");
+        return res.json();
+      })
+      .then(data => {
+        // Map keys to friendly titles
+        const gameTitles = {
+          hide: "Hide and Seek",
+          dr: "Deathrun",
+          murder: "Murder Mystery",
+          sg: "Survival Games",
+          sky: "Skywars",
+          ctf: "Capture the Flag",
+          drop: "Block Drop",
+          ground: "Groundwars",
+          build: "Build Battle",
+          party: "Block Party",
+          bridge: "Bridge",
+          grav: "Gravity",
+          bed: "Bedwars"
+        };
+
+        function formatDate(timestamp) {
+          return new Date(timestamp * 1000).toLocaleDateString();
+        }
+
+        let html = "";
+
+        for (const gameKey in gameTitles) {
+          const stats = data[gameKey];
+          if (!stats) continue;
+
+          html += `<h2>${gameTitles[gameKey]}</h2><ul>`;
+
+          for (const key in stats) {
+            if (key.toLowerCase() === "uuid") continue;  // skip UUID
+
+            let value = stats[key];
+            if (key === "first_played" && typeof value === "number") {
+              value = formatDate(value);
+            }
+
+            html += `<li><strong>${key.replace(/_/g, " ")}:</strong> ${value}</li>`;
+          }
+
+          html += "</ul>";
+        }
+
+        if (html === "") {
+          html = "No stats found.";
+        }
+
+        document.getElementById("stats").innerHTML = html;
+      })
+      .catch((error) => {
+        console.error("Error loading data:", error);
+        document.getElementById("stats").textContent = "Failed to load data.";
+      });
+  </script>
+</body>
+</html>
