@@ -65,7 +65,8 @@ Open server.js in a text editor (like VS Code or Notepad), and look for this lin
 const username = "ChessExpert07";
 Change "ChessExpert07" to your own Hive Minecraft username.
 
-
+Something i missed: in the index.html I hardcoded my ing as a title (lol), this is purly visual( Your real stats still show) and if you want to change it
+you can change the line "<h1>Stats for ChessExpert07</h1>" to <h1>Stats for Insert_usename_here</h1>
 
 4. 🚀 Start the Local Server
 From the terminal in your project folder, run:
